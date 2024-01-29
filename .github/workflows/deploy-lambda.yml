@@ -1,0 +1,51 @@
+name: Deploy Lambda Function
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy_application:
+    name: Deploy Have We Met On Val
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Install Python3.12
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          mkdir dependencies/
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -t dependencies/
+          cd dependencies/
+          zip -r dependencies.zip *
+          mv dependencies.zip ../
+          cd ../
+          rm -rf dependencies/
+
+      - name: Zip AWS Lambda function
+        run: |
+          mkdir package
+          unzip dependencies.zip -d package/
+          cp -r src/ package/
+          cd package/
+          zip -r package.zip *
+          mv package.zip ../
+
+      - name: Deploy to AWS Lambda
+        uses: appleboy/lambda-action@v0.1.9
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-2
+          function_name: have-we-met-on-val
+          zip_file: package.zip
+          memory_size: 128
+          timeout: 10
+          handler: src.main.handler
+          runtime: python3.12
