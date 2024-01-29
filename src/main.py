@@ -4,6 +4,9 @@ from client.hendrik.http_requests import AccountInfo, UserMatchData, Match, Play
 import json
 from typing import List, Tuple
 from model.lambda_response import LambdaResponse
+import logging as log
+
+log.getLogger().setLevel(log.INFO)
 
 def invalid_schema_response():
     error_body = {
@@ -44,6 +47,7 @@ def find_matches_with_target_username(puuid: str, target_username: str) -> List[
     return result
 
 def handler(event, lambda_context):
+    log.info(f'Event is: {event}')
     # validate post body
     if not validate_post_body(event):
         return invalid_schema_response()
