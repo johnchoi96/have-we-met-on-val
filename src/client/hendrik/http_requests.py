@@ -73,6 +73,7 @@ class MatchMetadata:
         self.match_id = metadata['matchid']
         self.region = metadata['region']
         self.cluster = metadata['cluster']
+        self.game_start_time = metadata['game_start']
 
     def __format_game_length(self, seconds) -> str:
         minutes = seconds // 60
@@ -87,7 +88,8 @@ class MatchMetadata:
             'game_mode': self.mode,
             'match_id': self.match_id,
             'region': self.region,
-            'cluster': self.cluster
+            'cluster': self.cluster,
+            'game_start_time': self.game_start_time
         }
 
 class Match:
