@@ -5,13 +5,6 @@ import json
 from typing import List, Tuple
 from model.lambda_response import LambdaResponse
 
-# event should have:
-# {
-#    "username": "",
-#    "tag": "",
-#    "target_username": ""
-# }
-
 def invalid_schema_response():
     error_body = {
         'error': 'Invalid post body'

@@ -32,7 +32,9 @@ jobs:
         run: |
           mkdir package
           unzip dependencies.zip -d package/
-          cp -r src/ package/
+          cd src/
+          cp -r * ../package/
+          cd ../
           cd package/
           zip -r package.zip *
           mv package.zip ../
