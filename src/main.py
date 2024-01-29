@@ -48,22 +48,27 @@ def find_matches_with_target_username(puuid: str, target_username: str) -> List[
 
 def handler(event, lambda_context):
     log.info(f'Event is: {event}')
+    post_request_body = json.loads(event['body'])
     # validate post body
-    if not validate_post_body(event):
+    if not validate_post_body(post_request_body):
         return invalid_schema_response()
 
     # get current user's puuid
-    puuid = get_puuid(event)
-    target_username = event['target_username']
+    puuid = get_puuid(post_request_body)
+    target_username = post_request_body['target_username']
     found_matches = find_matches_with_target_username(puuid, target_username)
     lambda_response = LambdaResponse(found_matches)
     return lambda_response.json()
 
 if __name__ == '__main__':
+    body = {
+        'username': 'thisGuyCodes',
+        'tag': '0991',
+        'target_username': 'Rhyestang'
+    }
+    string_body = json.dumps(body)
     event = {
-        "username": "thisGuyCodes",
-        "tag": "0991",
-        "target_username": "Rhyestang"
+        'body': string_body
     }
     response = handler(event, None)
     print(json.dumps(response))
