@@ -1,13 +1,28 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from client.hendrik.http_requests import Match, Player
 
 class LambdaResponse:
-    def __init__(self, results: List[Tuple[Match, Player]]):
-        self.results = results
+    error_msg: Optional[str] = None
+    results: Optional[List[Tuple[Match, Player]]] = None
 
-    def json(self):
+    @classmethod
+    def set_results(cls, results: List[Tuple[Match, Player]]):
+        cls.results = results
+
+    @classmethod
+    def set_error(cls, error_msg: str):
+        cls.error_msg = error_msg
+
+    @classmethod
+    def json(cls):
+        if cls.error_msg:
+            return {
+                'error': {
+                    'message': cls.error_msg
+                }
+            }
         matches = []
-        for result in self.results:
+        for result in cls.results:
             item = {
                 'match': result[0].json(),
                 'player': result[1].json()
