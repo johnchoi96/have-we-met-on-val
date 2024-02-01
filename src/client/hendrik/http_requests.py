@@ -27,6 +27,9 @@ class AccountInfo:
     @cache
     def get_account_info(self) -> _AccountInfoMetadata:
         response = requests.request('GET', self.endpoint)
+        # check if response was 200 (found a user)
+        if response.status_code != 200:
+            return None
         response = json.loads(response.text)['data']
         return _AccountInfoMetadata(
             response['puuid'],
@@ -36,8 +39,11 @@ class AccountInfo:
             response['tag']
         )
 
-    def get_puuid(self) -> str:
-        return self.get_account_info().puuid
+    def get_puuid(self) -> str | None:
+        account_info = self.get_account_info()
+        if account_info:
+            return account_info.puuid
+        return None
 
 class Player:
     def __init__(self, raw_data):

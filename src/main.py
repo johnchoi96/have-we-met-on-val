@@ -21,6 +21,19 @@ def invalid_schema_response():
         'body': json.dumps(error_body)
     }
 
+def error_schema_response(msg: str = None):
+    error_body = {
+        'error': msg
+    }
+    return {
+        'isBase64Encoded': False,
+        'statusCode': 204,
+        'headers': {
+            'content-type': 'application/json'
+        },
+        'body': json.dumps(error_body)
+    }
+
 def validate_post_body(event):
     try:
         schema = post_body_schema.schema
@@ -56,15 +69,17 @@ def handler(event, lambda_context):
     # get current user's puuid
     puuid = get_puuid(post_request_body)
     target_username = post_request_body['target_username']
+    if puuid is None:
+        return error_schema_response('User not found')
     found_matches = find_matches_with_target_username(puuid, target_username)
     lambda_response = LambdaResponse(found_matches)
     return lambda_response.json()
 
 if __name__ == '__main__':
     body = {
-        'username': 'thisGuyCodes',
-        'tag': '0991',
-        'target_username': 'Rhyestang'
+        'username': 'ElSeñorDeLaNoche',
+        'tag': 'eeee',
+        'target_username': 'BaconBunny'
     }
     string_body = json.dumps(body)
     event = {
