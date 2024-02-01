@@ -77,9 +77,9 @@ def handler(event, lambda_context):
 
 if __name__ == '__main__':
     body = {
-        'username': 'ElSeñorDeLaNoche',
-        'tag': 'eeee',
-        'target_username': 'BaconBunny'
+        'username': 'thisGuyCodes',
+        'tag': '0991',
+        'target_username': 'ElSeñorDeLaNoche'
     }
     string_body = json.dumps(body)
     event = {
