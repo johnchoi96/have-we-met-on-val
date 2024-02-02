@@ -70,8 +70,10 @@ def handler(event, lambda_context):
     puuid = get_puuid(post_request_body)
     target_username = post_request_body['target_username']
     if puuid is None:
+        log.info('User not found')
         LambdaResponse.set_error('User not found')
     else:
+        log.info('User found')
         found_matches = find_matches_with_target_username(puuid, target_username)
         LambdaResponse.set_results(found_matches)
     return LambdaResponse.json()
