@@ -31,3 +31,8 @@ class LambdaResponse:
         return {
             'matches': matches
         }
+
+    @classmethod
+    def reset(cls):
+        cls.error_msg = None
+        cls.results = None
