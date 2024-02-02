@@ -22,7 +22,7 @@ class AccountInfo:
     def __init__(self, username: str, tag: str) -> None:
         self.username: str = username
         self.tag: str = tag
-        self.endpoint: str = f'https://api.henrikdev.xyz/valorant/v1/account/{self.username}/{self.tag}'
+        self.endpoint: str = f'https://api.henrikdev.xyz/valorant/v1/account/{self.username}/{self.tag}?force=true'
 
     def get_account_info(self) -> _AccountInfoMetadata:
         response = requests.request('GET', self.endpoint)
