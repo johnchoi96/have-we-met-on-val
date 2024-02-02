@@ -76,6 +76,7 @@ def handler(event, lambda_context):
         log.info('User found')
         found_matches = find_matches_with_target_username(puuid, target_username)
         LambdaResponse.set_results(found_matches)
+    log.info(f'Response: {LambdaResponse.json()}')
     return LambdaResponse.json()
 
 if __name__ == '__main__':
